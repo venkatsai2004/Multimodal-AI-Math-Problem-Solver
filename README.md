@@ -1,15 +1,3 @@
----
-title: Math Mentor - Reliable Multimodal JEE Math Solver
-emoji: 🧠
-colorFrom: blue
-colorTo: purple
-sdk: streamlit
-sdk_version: 1.52.2
-app_file: app.py
-pinned: false
-license: apache-2.0
----
-
 # 🧠 Math Mentor - Reliable Multimodal JEE Math Solver
 
 [![Hugging Face Spaces](https://img.shields.io/badge/🤗%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/Vsai2004/multimodal_ai_math_solver)
