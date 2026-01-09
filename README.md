@@ -14,7 +14,8 @@ license: apache-2.0
 
 [![Hugging Face Spaces](https://img.shields.io/badge/🤗%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/Vsai2004/multimodal_ai_math_solver)  
 
-![App Preview](https://via.placeholder.com/1200x600?text=Math+Mentor+App+Screenshot)  
+![App Preview](<img width="1919" height="969" alt="image" src="https://github.com/user-attachments/assets/c484e834-f714-43c4-9766-348615e74b09" />
+)  
 
 ## About
 
