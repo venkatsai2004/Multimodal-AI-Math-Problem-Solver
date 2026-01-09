@@ -33,7 +33,7 @@ The app solves JEE-style math problems (algebra, probability, basic calculus, li
 
 ## Live Demo
 
-Try the app here:(https://huggingface.co/spaces/Vsai2004/multimodal_ai_math_solve)  
+Try the app here:[(https://huggingface.co/spaces/Vsai2004/multimodal_ai_math_solve)](https://huggingface.co/spaces/Vsai2004/multimodal_ai_math_solver)  
 
 
 **Note**: First load may take 10–20 minutes (model downloads). Use a Groq API key in Space secrets for full functionality.
