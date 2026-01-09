@@ -1,0 +1,43 @@
+# =========================
+# LangChain 0.3 (MODERN)
+# =========================
+langchain>=0.3.1,<0.4
+langchain-core>=0.3.7,<0.4
+langchain-community>=0.3.1,<0.4
+langchain-groq>=0.2.0,<0.3
+langchain-experimental>=0.3.0,<0.5
+
+# =========================
+# Embeddings & Vector DB
+# =========================
+sentence-transformers==3.2.1
+chromadb==0.5.1
+
+# =========================
+# Multimodal
+# =========================
+# easyocr==1.7.2
+pytesseract==0.3.10
+faster-whisper==1.1.0
+Pillow==10.4.0
+
+# =========================
+# Math & Utilities
+# =========================
+sympy==1.13.3
+python-dotenv==1.0.1
+numpy==1.26.4
+
+# =========================
+# Torch (CPU, Windows)
+# =========================
+torch==2.4.1
+torchvision==0.19.1
+torchaudio==2.4.1
+
+--extra-index-url https://download.pytorch.org/whl/cpu
+=======
+altair
+pandas
+streamlit
+

@@ -1,0 +1,103 @@
+# Secrets (MUST ignore)
+.env
+
+# Local virtual env
+.planet/
+
+# Test assets (NOT for HF Spaces)
+Auido Testing Ex/
+Image Testing/
+
+# Audio / media (HF will reject)
+*.mp3
+*.wav
+*.mp4
+*.ogg
+
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# IDE and Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Data directories (generated at runtime)
+data/
+vector_store/
+solved_problems_vector_store/
+sessions/
+
+# Streamlit cache
+.streamlit/
+
+# Test and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Large model files (downloaded at runtime)
+*.bin
+*.pt
+*.pth
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.backup
+*~
+
+# Keep knowledge base but ignore generated vector stores
+knowledge/**/*.db
+knowledge/**/*.pkl
+
+# Audio/image uploads (if saving locally)
+uploads/
+temp/
