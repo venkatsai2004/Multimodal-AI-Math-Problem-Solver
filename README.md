@@ -39,6 +39,7 @@ Memory Storage: Saves the solved problem so similar future problems can reuse th
 
 If at any step the confidence is too low, the Human-in-the-Loop (HITL) system asks for your input to correct or clarify.
 Architecture Diagram
+
 ┌─────────────────────────────────────────────────────────────────┐
 │                     USER INTERFACE (Streamlit)                   │
 │  Text / Image / Audio Input → Preview & Edit → Solve Button    │
