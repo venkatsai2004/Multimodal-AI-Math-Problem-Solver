@@ -23,7 +23,122 @@ The app solves JEE-style math problems (algebra, probability, basic calculus, li
 
 ## Live Demo
 
-Try the app here:[(https://huggingface.co/spaces/Vsai2004/multimodal_ai_math_solve)](https://huggingface.co/spaces/Vsai2004/multimodal_ai_math_solver)  
+Try the app here:[(https://huggingface.co/spaces/Vsai2004/multimodal_ai_math_solve)](https://huggingface.co/spaces/Vsai2004/multimodal_ai_math_solver)
+
+## How It Works (Workflow)
+When you submit a problem, this is what happens behind the scenes:
+
+Multimodal Processing: Your input (text, image, or audio) is converted to clean text with confidence scores
+Parser Agent: Structures the raw text into a formal problem with topic, variables, and constraints
+Router Agent: Analyzes the problem and decides which tools and knowledge depth to use
+RAG Retrieval: Searches the knowledge base for relevant formulas and solution patterns
+Solver Agent: Uses the retrieved knowledge plus SymPy tools to solve the problem step-by-step
+Verifier Agent: Checks if the solution is mathematically correct and identifies any issues
+Explainer Agent: Transforms the solution into a clear, student-friendly explanation
+Memory Storage: Saves the solved problem so similar future problems can reuse the pattern
+
+If at any step the confidence is too low, the Human-in-the-Loop (HITL) system asks for your input to correct or clarify.
+Architecture Diagram
+┌─────────────────────────────────────────────────────────────────┐
+│                     USER INTERFACE (Streamlit)                   │
+│  Text / Image / Audio Input → Preview & Edit → Solve Button    │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           ▼
+        ┌──────────────────────────────────────┐
+        │    MULTIMODAL INPUT PROCESSING        │
+        ├──────────────────────────────────────┤
+        │ • Text: passthrough                   │
+        │ • Image: EasyOCR                      │
+        │ • Audio: faster-whisper (ASR)         │
+        │ Output: raw_text + confidence         │
+        └──────────────────┬───────────────────┘
+                           │
+                           ▼
+     ┌─────────────────────────────────────────────┐
+     │      PARSER AGENT (core/prompts.py)          │
+     │ Input: raw text with noise/OCR errors        │
+     ├─────────────────────────────────────────────┤
+     │ • Clean & normalize text                     │
+     │ • Identify topic (algebra/probability/...)   │
+     │ • Extract variables & constraints            │
+     │ • Detect ambiguity → trigger HITL if needed  │
+     │ Output: structured problem                   │
+     └────────────────┬────────────────────────────┘
+                      │
+                      ▼
+    ┌──────────────────────────────────────────────┐
+    │     ROUTER AGENT (agents/router_agent.py)     │
+    │ Input: structured problem                     │
+    ├──────────────────────────────────────────────┤
+    │ • Confirm topic classification                │
+    │ • Decide required tools (sympy_calculator)    │
+    │ • Set RAG depth (deep/shallow/none)           │
+    │ Output: routing decision                      │
+    └──────────────┬───────────────────────────────┘
+                   │
+         ┌─────────┴──────────┐
+         │                    │
+         ▼                    ▼
+   ┌──────────────┐   ┌──────────────────────┐
+   │ HYBRID RAG   │   │  SOLVER AGENT        │
+   │              │   │                      │
+   │ 1. KB Retrieval  │ • Use retrieved RAG  │
+   │ 2. Memory   │   │ • Call sympy tools   │
+   │    Retrieval │   │ • Reason step-by-step│
+   │              │   │ Output: steps +answer│
+   │ Returns:    │   └──────────┬───────────┘
+   │ Relevant    │              │
+   │ chunks with │              ▼
+   │ sources     │   ┌──────────────────────┐
+   └──────────────┘   │  VERIFIER AGENT      │
+                      │                      │
+                      │ • Check correctness  │
+                      │ • Verify domain      │
+                      │ • Test edge cases    │
+                      │ • Confidence score   │
+                      │                      │
+                      │ If low confidence    │
+                      │ → trigger HITL       │
+                      │                      │
+                      │ Output: is_correct,  │
+                      │ confidence, issues   │
+                      └──────────┬───────────┘
+                                 │
+                                 ▼
+                    ┌────────────────────────┐
+                    │  EXPLAINER AGENT       │
+                    │                        │
+                    │ Make solution clear    │
+                    │ for students           │
+                    │ Step-by-step style     │
+                    │ Highlight concepts     │
+                    │                        │
+                    │ Output: explanation    │
+                    └──────────┬─────────────┘
+                               │
+                               ▼
+        ┌──────────────────────────────────────┐
+        │  MEMORY & LEARNING LAYER              │
+        ├──────────────────────────────────────┤
+        │ • Store solved problem in vector DB   │
+        │ • Track user feedback (correct/fix)   │
+        │ • Store HITL corrections              │
+        │ • Enable pattern reuse for similar    │
+        │   future problems                     │
+        └──────────────────────────────────────┘
+                               │
+                               ▼
+        ┌──────────────────────────────────────┐
+        │   DISPLAY RESULTS TO USER             │
+        ├──────────────────────────────────────┤
+        │ • Final solution & explanation        │
+        │ • Step-by-step breakdown              │
+        │ • Retrieved sources with citations    │
+        │ • Complete agent trace (transparency) │
+        │ • Confidence indicators               │
+        │ • Feedback buttons                    │
+        └──────────────────────────────────────┘
 
 
 **Note**: First load may take 10–20 minutes (model downloads). Use a Groq API key in Space secrets for full functionality.
