@@ -38,8 +38,11 @@ Explainer Agent: Transforms the solution into a clear, student-friendly explanat
 Memory Storage: Saves the solved problem so similar future problems can reuse the pattern
 
 If at any step the confidence is too low, the Human-in-the-Loop (HITL) system asks for your input to correct or clarify.
-Architecture Diagram
 
+
+## Architecture Diagram
+
+```mermaid
 flowchart TD
 
 %% UI
@@ -92,6 +95,7 @@ O --> P[Student-friendly Explanation]
 
 %% Output
 P --> Q[Final Output to UI]
+```
 
 **Note**: First load may take 10–20 minutes (model downloads). Use a Groq API key in Space secrets for full functionality.
 
