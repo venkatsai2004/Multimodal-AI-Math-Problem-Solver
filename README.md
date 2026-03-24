@@ -40,109 +40,60 @@ Memory Storage: Saves the solved problem so similar future problems can reuse th
 If at any step the confidence is too low, the Human-in-the-Loop (HITL) system asks for your input to correct or clarify.
 Architecture Diagram
 
-┌─────────────────────────────────────────────────────────────────┐
-│                     USER INTERFACE (Streamlit)                   │
-│  Text / Image / Audio Input → Preview & Edit → Solve Button    │
-└──────────────────────────┬──────────────────────────────────────┘
-                           │
-                           ▼
-        ┌──────────────────────────────────────┐
-        │    MULTIMODAL INPUT PROCESSING        │
-        ├──────────────────────────────────────┤
-        │ • Text: passthrough                   │
-        │ • Image: EasyOCR                      │
-        │ • Audio: faster-whisper (ASR)         │
-        │ Output: raw_text + confidence         │
-        └──────────────────┬───────────────────┘
-                           │
-                           ▼
-     ┌─────────────────────────────────────────────┐
-     │      PARSER AGENT (core/prompts.py)          │
-     │ Input: raw text with noise/OCR errors        │
-     ├─────────────────────────────────────────────┤
-     │ • Clean & normalize text                     │
-     │ • Identify topic (algebra/probability/...)   │
-     │ • Extract variables & constraints            │
-     │ • Detect ambiguity → trigger HITL if needed  │
-     │ Output: structured problem                   │
-     └────────────────┬────────────────────────────┘
-                      │
-                      ▼
-    ┌──────────────────────────────────────────────┐
-    │     ROUTER AGENT (agents/router_agent.py)     │
-    │ Input: structured problem                     │
-    ├──────────────────────────────────────────────┤
-    │ • Confirm topic classification                │
-    │ • Decide required tools (sympy_calculator)    │
-    │ • Set RAG depth (deep/shallow/none)           │
-    │ Output: routing decision                      │
-    └──────────────┬───────────────────────────────┘
-                   │
-         ┌─────────┴──────────┐
-         │                    │
-         ▼                    ▼
-   ┌──────────────┐   ┌──────────────────────┐
-   │ HYBRID RAG   │   │  SOLVER AGENT        │
-   │              │   │                      │
-   │ 1. KB Retrieval  │ • Use retrieved RAG  │
-   │ 2. Memory   │   │ • Call sympy tools   │
-   │    Retrieval │   │ • Reason step-by-step│
-   │              │   │ Output: steps +answer│
-   │ Returns:    │   └──────────┬───────────┘
-   │ Relevant    │              │
-   │ chunks with │              ▼
-   │ sources     │   ┌──────────────────────┐
-   └──────────────┘   │  VERIFIER AGENT      │
-                      │                      │
-                      │ • Check correctness  │
-                      │ • Verify domain      │
-                      │ • Test edge cases    │
-                      │ • Confidence score   │
-                      │                      │
-                      │ If low confidence    │
-                      │ → trigger HITL       │
-                      │                      │
-                      │ Output: is_correct,  │
-                      │ confidence, issues   │
-                      └──────────┬───────────┘
-                                 │
-                                 ▼
-                    ┌────────────────────────┐
-                    │  EXPLAINER AGENT       │
-                    │                        │
-                    │ Make solution clear    │
-                    │ for students           │
-                    │ Step-by-step style     │
-                    │ Highlight concepts     │
-                    │                        │
-                    │ Output: explanation    │
-                    └──────────┬─────────────┘
-                               │
-                               ▼
-        ┌──────────────────────────────────────┐
-        │  MEMORY & LEARNING LAYER              │
-        ├──────────────────────────────────────┤
-        │ • Store solved problem in vector DB   │
-        │ • Track user feedback (correct/fix)   │
-        │ • Store HITL corrections              │
-        │ • Enable pattern reuse for similar    │
-        │   future problems                     │
-        └──────────────────────────────────────┘
-                               │
-                               ▼
-        ┌──────────────────────────────────────┐
-        │   DISPLAY RESULTS TO USER             │
-        ├──────────────────────────────────────┤
-        │ • Final solution & explanation        │
-        │ • Step-by-step breakdown              │
-        │ • Retrieved sources with citations    │
-        │ • Complete agent trace (transparency) │
-        │ • Confidence indicators               │
-        │ • Feedback buttons                    │
-        └──────────────────────────────────────┘
+```mermaid
+flowchart TD
 
+%% UI
+A[User Input: Text / Image / Audio] --> B[Streamlit UI]
+B --> C[Preview & Edit]
+C --> D[Solve Button]
 
-**Note**: First load may take 10–20 minutes (model downloads). Use a Groq API key in Space secrets for full functionality.
+%% Input Processing
+D --> E[Multimodal Processing]
+E --> E1[Text: passthrough]
+E --> E2[Image: OCR (EasyOCR)]
+E --> E3[Audio: Whisper ASR]
+E --> F[Raw Text + Confidence]
+
+%% Parser
+F --> G[Parser Agent]
+G --> G1[Clean & Normalize Text]
+G --> G2[Extract Variables & Constraints]
+G --> G3[Detect Ambiguity]
+G --> H[Structured Problem]
+
+%% Router
+H --> I[Router Agent]
+I --> I1[Topic Classification]
+I --> I2[Select Tools]
+I --> I3[Set RAG Depth]
+
+%% RAG + Solver
+I --> J[Hybrid RAG System]
+J --> J1[Knowledge Base Retrieval]
+J --> J2[Memory Retrieval]
+
+J --> K[Solver Agent]
+K --> K1[Step-by-step Reasoning]
+K --> K2[Use SymPy Tools]
+K --> L[Solution + Answer]
+
+%% Verification
+L --> M[Verifier Agent]
+M --> M1[Check Correctness]
+M --> M2[Test Edge Cases]
+M --> M3[Confidence Score]
+
+%% HITL
+M -->|Low Confidence| N[Human-in-the-Loop]
+
+%% Explanation
+M --> O[Explainer Agent]
+O --> P[Student-friendly Explanation]
+
+%% Output
+P --> Q[Final Output to UI]
+```**Note**: First load may take 10–20 minutes (model downloads). Use a Groq API key in Space secrets for full functionality.
 
 ## Features
 
