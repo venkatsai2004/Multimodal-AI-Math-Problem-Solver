@@ -40,7 +40,6 @@ Memory Storage: Saves the solved problem so similar future problems can reuse th
 If at any step the confidence is too low, the Human-in-the-Loop (HITL) system asks for your input to correct or clarify.
 Architecture Diagram
 
-```mermaid
 flowchart TD
 
 %% UI
@@ -50,9 +49,9 @@ C --> D[Solve Button]
 
 %% Input Processing
 D --> E[Multimodal Processing]
-E --> E1[Text: passthrough]
-E --> E2[Image: OCR (EasyOCR)]
-E --> E3[Audio: Whisper ASR]
+E --> E1[Text passthrough]
+E --> E2[Image OCR EasyOCR]
+E --> E3[Audio Whisper ASR]
 E --> F[Raw Text + Confidence]
 
 %% Parser
@@ -93,7 +92,8 @@ O --> P[Student-friendly Explanation]
 
 %% Output
 P --> Q[Final Output to UI]
-```**Note**: First load may take 10–20 minutes (model downloads). Use a Groq API key in Space secrets for full functionality.
+
+**Note**: First load may take 10–20 minutes (model downloads). Use a Groq API key in Space secrets for full functionality.
 
 ## Features
 
