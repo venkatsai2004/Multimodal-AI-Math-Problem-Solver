@@ -6,11 +6,11 @@ Handles text, image (OCR with EasyOCR), and audio (ASR with faster-whisper).
 
 import io
 import tempfile
-import numpy as np
 from pathlib import Path
 from typing import Union
 
 import easyocr
+import numpy as np
 from faster_whisper import WhisperModel
 from PIL import Image
 
@@ -24,7 +24,7 @@ _asr_model = None
 def _get_ocr_reader():
     global _ocr_reader
     if _ocr_reader is None:
-        _ocr_reader = easyocr.Reader(['en'], gpu=True)  # GPU if available, else CPU
+        _ocr_reader = easyocr.Reader(["en"], gpu=True)  # GPU if available, else CPU
     return _ocr_reader
 
 
@@ -36,11 +36,7 @@ def _get_asr_model():
 
 
 def process_text_input(text: str) -> dict:
-    return {
-        "raw_text": text.strip(),
-        "confidence": 1.0,
-        "source": "text"
-    }
+    return {"raw_text": text.strip(), "confidence": 1.0, "source": "text"}
 
 
 def process_image_input(image: Union[Image.Image, bytes, Path, str]) -> dict:
@@ -70,7 +66,7 @@ def process_image_input(image: Union[Image.Image, bytes, Path, str]) -> dict:
     return {
         "raw_text": raw_text.strip(),
         "confidence": round(float(confidence), 3),
-        "source": "image"
+        "source": "image",
     }
 
 
@@ -105,5 +101,5 @@ def process_audio_input(audio: Union[bytes, Path, str]) -> dict:
     return {
         "raw_text": raw_text.strip() if raw_text else "(No audio detected)",
         "confidence": round(confidence, 3),
-        "source": "audio"
+        "source": "audio",
     }

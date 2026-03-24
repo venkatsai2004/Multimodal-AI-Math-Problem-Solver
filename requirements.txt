@@ -14,6 +14,13 @@ sentence-transformers==3.2.1
 chromadb==0.5.1
 
 # =========================
+# frontend
+# =========================
+fastapi
+uvicorn
+python-multipart
+
+# =========================
 # Multimodal
 # =========================
 easyocr==1.7.2
